@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" alt="KeyTask" width="110" />
+  <img src="assets/logo.png" alt="KeyTask" width="110" /> 
 </p>
 
 # KeyTask
