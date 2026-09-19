@@ -6,8 +6,8 @@ spring:
       host: localhost
       port: 27017
       database: KeyTask
-security:
-  oauth2:
-    ressourceserver:
-      jwt:
-        issuer-uri: http://localhost:8080/realms/KeyTask
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/KeyTask
