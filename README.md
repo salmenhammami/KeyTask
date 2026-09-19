@@ -1,53 +1,61 @@
-# KeyTask
-
-A secure, full-stack task management application featuring centralized identity management and role-based access control. 
 <p align="center">
-  <img src="assets/logo.png" alt="KeyTask Logo" width="120" />
+  <img src="assets/logo.png" alt="KeyTask" width="110" />
 </p>
 
-## Overview
+# KeyTask
 
-**KeyTask** simplifies task organization and team collaboration without compromising security. Built around modern identity protocols, it manages user workflows, group administration, and task assignments backed by enterprise-grade OAuth2/OIDC authentication.
+A task manager for teams, with the login handled by Keycloak instead of by the app.
 
-## Preview
+I built this during a one-month internship at Lunar TC. The tasks and groups are
+straightforward; the point of the project was learning how single sign-on actually
+works — letting Keycloak own identity and having the API just validate the token it
+issues.
 
-| Landing Page | Keycloak SSO Authentication |
+| Landing page | Keycloak login |
 | :---: | :---: |
-| ![KeyTask Landing Page](assets/welcome.png) | ![Keycloak Login Screen](assets/keycloak-login.png) |
+| ![Landing page](assets/welcome.png) | ![Keycloak login](assets/keycloak-login.png) |
 
-## Key Features
+## What it does
 
-* **Workspace & Task Tracking:** Create, assign, and manage daily tasks across customizable team groups.
-* **Centralized Authentication:** Integrated with Keycloak for Single Sign-On (SSO) using OAuth2 and OpenID Connect (OIDC).
-* **Role-Based Access Control (RBAC):** Fine-grained permission rules governing administrative and user actions across endpoints.
-* **Interactive UI:** Clean, responsive interface for tracking task progress and user assignments.
+- Create a group, join one, manage its members
+- Assign tasks that repeat daily, weekly, monthly or yearly
+- Sign in once through Keycloak (OAuth2 / OIDC) — no passwords stored in the app
+- Restrict admin actions by role
 
-## Tech Stack
+**Built with** Spring Boot 3, Angular 19, MongoDB and Keycloak 26.
 
-* **Backend:** Java Spring Boot (REST APIs)
-* **Frontend:** Angular
-* **Security & Identity:** Keycloak (OAuth2 / OIDC)
-* **Database:** MongoDB
-* **Build & Version Control:** Maven, Git
+## Running it
 
-## Getting Started
-
-### Prerequisites
-* JDK 17+ and Maven
-* Node.js & Angular CLI
-
-### Quick Setup
+You'll need JDK 23, Node 18+, and Docker for the services.
 
 ```bash
-# Clone the repository
-git clone https://github.com/HammamiSalmen/KeyTask.git
-cd KeyTask
+docker run -d -p 27017:27017 mongo:6
+docker run -d -p 8080:8080 \
+  -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin \
+  quay.io/keycloak/keycloak:26.0 start-dev
+```
 
-# Launch the backend service
-cd backend
-./mvn spring-boot:run
+In the Keycloak console at `localhost:8080`, create a realm called **KeyTask** and a
+public client allowing `http://localhost:4200/*`.
 
-# Launch the Angular frontend
-cd ../frontend
-npm install
-ng serve
+```bash
+git clone https://github.com/salmenhammami/KeyTask.git
+
+cd KeyTask/Projet/Backend
+./mvnw spring-boot:run        # Windows: mvnw.cmd spring-boot:run
+
+cd ../Frontend
+npm install && npm start
+```
+
+The API runs on port 8081, the Angular app on 4200.
+
+## Honest notes
+
+This was early-internship work. The realm has to be set up by hand because I never
+exported it, the issuer URI in `application.yml` is nested under the wrong key so
+Spring doesn't pick it up, and there are no tests yet. All three are on my list.
+
+---
+
+**Salmen Hammami** · [GitHub](https://github.com/salmenhammami) · [LinkedIn](https://www.linkedin.com/in/salmenhammami/)
